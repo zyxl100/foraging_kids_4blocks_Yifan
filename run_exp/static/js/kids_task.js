@@ -15,7 +15,7 @@
 ********************/
 var debug_mode = 0; // debug mode determines how long the blocks are, 5 sec in debug mode, 5 minutes in actual experiment
 //var data_save_method = 'csv_server_py';
-var data_save_method = 'csv_server_py';
+var data_save_method = 'csv_client';
 
 /* Disable right-click/context menu */
 if(debug_mode == false) {
@@ -282,7 +282,7 @@ if (debug_mode) {
 } else {
   //var total_num_blocks = 1;
   var total_num_blocks = 4;
-  var block_len = [360000,360000,360000,360000]; // array of how long block_len should be
+  var block_len = [300000,300000,300000,300000]; // array of how long block_len should be
   //var block_len = [1500,1500,1500,1500];
   var n_prac_trials = 4;
   timeline.push({
@@ -372,8 +372,18 @@ var go_forward = function(data) {
 
 //////////////////////////////////////////////////////////////////
 
-
-
+///// ID //////
+var get_id = {
+  type: 'survey-html-form',
+  html: "<label for='worker_id'>Enter your Subject ID. Please make sure this is correct! </label><br><input type='text' id='worker_id' name='worker_id' required><br><br>",
+  on_finish: function (data) {
+    window.useridtouse=data.responses
+    window.useridtouse = useridtouse.split('"')[3];
+    subject_id=useridtouse
+    data.subject_id = useridtouse
+  }
+}
+///// ID //////
 
 /* STRUCTURE OF GAME - TYPES OF TRIALS */
 // arival at new planet
@@ -1577,7 +1587,7 @@ var end_of_experiment_continue = {
 };
 
 // Welcome to the experiment
-timeline.push(welcome); // add variable welcome to end of timeline array
+timeline.push(get_id,welcome); // add variable welcome to end of timeline array
 timeline.push(move_explain); // add variable welcome to end of timeline array
 timeline.push(welcome_dec); // add variable welcome to end of timeline array
 timeline.push(lock_choice); // add variable welcome to end of timeline array
@@ -1593,54 +1603,26 @@ all_audio = ['../static/audio/axe.mp3', '../static/audio/clip_10_quiz.m4a', '../
     preload_audio:all_audio,
     max_load_time: 60000000,
     use_webaudio: false,
-    on_trial_start: function(data) {
-    var interaction_data = jsPsych.data.getInteractionData();
-    var blur_events = interaction_data.filter({event: 'blur'});
-    var focus_events = interaction_data.filter({event: 'focus'});
-    var fullscreenenter_events = interaction_data.filter({event: 'fullscreenenter'});
-    var fullscreenexit_events = interaction_data.filter({event: 'fullscreenexit'});
-    jsPsych.data.get().addToLast({interactions: interaction_data.csv()});
-    jsPsych.data.get().addToLast({blur_events: blur_events.csv()});
-    jsPsych.data.get().addToLast({focus_events: focus_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenenter_events: fullscreenenter_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenexit_events: fullscreenexit_events.csv()});},
-  on_interaction_data_update: function (data) {
-    var interaction_data = jsPsych.data.getInteractionData();
-    var blur_events = interaction_data.filter({event: 'blur'});
-    var focus_events = interaction_data.filter({event: 'focus'});
-    var fullscreenenter_events = interaction_data.filter({event: 'fullscreenenter'});
-    var fullscreenexit_events = interaction_data.filter({event: 'fullscreenexit'});
-    jsPsych.data.get().addToLast({interactions: interaction_data.csv()});
-    jsPsych.data.get().addToLast({blur_events: blur_events.csv()});
-    jsPsych.data.get().addToLast({focus_events: focus_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenenter_events: fullscreenenter_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenexit_events: fullscreenexit_events.csv()});},
-  on_close: function (data) {
-    var interaction_data = jsPsych.data.getInteractionData();
-    var blur_events = interaction_data.filter({event: 'blur'});
-    var focus_events = interaction_data.filter({event: 'focus'});
-    var fullscreenenter_events = interaction_data.filter({event: 'fullscreenenter'});
-    var fullscreenexit_events = interaction_data.filter({event: 'fullscreenexit'});
-    jsPsych.data.get().addToLast({interactions: interaction_data.csv()});
-    jsPsych.data.get().addToLast({blur_events: blur_events.csv()});
-    jsPsych.data.get().addToLast({focus_events: focus_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenenter_events: fullscreenenter_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenexit_events: fullscreenexit_events.csv()});},
-  on_finish: function(data) {
-    var interaction_data = jsPsych.data.getInteractionData();
-    var blur_events = interaction_data.filter({event: 'blur'});
-    var focus_events = interaction_data.filter({event: 'focus'});
-    var fullscreenenter_events = interaction_data.filter({event: 'fullscreenenter'});
-    var fullscreenexit_events = interaction_data.filter({event: 'fullscreenexit'});
-    jsPsych.data.get().addToLast({interactions: interaction_data.csv()});
-    jsPsych.data.get().addToLast({blur_events: blur_events.csv()});
-    jsPsych.data.get().addToLast({focus_events: focus_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenenter_events: fullscreenenter_events.csv()});
-    jsPsych.data.get().addToLast({fullscreenexit_events: fullscreenexit_events.csv()});
+  //   on_finish: function() {
+  //   save_final_deter = 'final';
+  //   psiturk.recordUnstructuredData("subject_id", subject_id);
+  //   save_data(true)
+  //   // document.body.innerHTML = '<p> <center>Thank you for participating in the second part of the study! Please wait while your data saves. After 10 seconds, you will be redirected to Spark. </center> </p>';
+  //   //   setTimeout(function () {var end_link = "https://spark.hartleylab.org/completed/".concat(subject_id); window.location = end_link;}, 10000)
+  //   document.body.innerHTML = '<p> <center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished. </center> </p>';
+  //     setTimeout(function () {var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw" + "?participant_ID="+participant_id+"&subject_ID=" +subject_id; window.location = end_link;}, 10000)
+  // }
+  on_finish: function() {
+  save_final_deter = 'final';
+  save_data(true);
 
-    // document.body.innerHTML = '<p> <center>Thank you for participating in the second part of the study! Please wait while your data saves. After 10 seconds, you will be redirected to Spark. </center> </p>';
-    //   setTimeout(function () {var end_link = "https://spark.hartleylab.org/completed/".concat(subject_id); window.location = end_link;}, 10000)
-    document.body.innerHTML = '<p> <center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished. </center> </p>';
-      setTimeout(function () {var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw" + "?participant_ID="+participant_id+"&subject_ID=" +subject_id; window.location = end_link;}, 10000)
-  }
+  document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished.</center></p>';
+
+  setTimeout(function () {
+    var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw"
+      + "?participant_ID=" + participant_id
+      + "&subject_ID=" + subject_id;
+    window.location = end_link;
+  }, 10000);
+}
 })
