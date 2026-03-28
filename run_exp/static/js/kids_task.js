@@ -351,7 +351,11 @@ var go_back = function(data) {
   } else if (data.trial_type == 'instruc_alien_greet') {
     jsPsych.addNodeToEndOfTimeline({timeline: [instructions_dig,instructions_dig_try,dig_prac,instructions_travel,instructions_travel_try,travel_prac,instructions_alien,instruc_dec,lock_choice],}, jsPsych.resumeExperiment);
   } else if (data.trial_type == 'time_out') {
-    jsPsych.addNodeToEndOfTimeline({timeline: [instructions_alien,instruc_dec,lock_choice],}, jsPsych.resumeExperiment);}}
+    jsPsych.addNodeToEndOfTimeline({timeline: [instructions_alien,instruc_dec,lock_choice],}, jsPsych.resumeExperiment);
+  } else if (data.trial_type == 'instruc_break') {
+    jsPsych.addNodeToEndOfTimeline({timeline: [instructions_time_out,instruc_dec,lock_choice],}, jsPsych.resumeExperiment);
+  }
+}
 
 var go_forward = function(data) {
   if (data.trial_type == 'welcome_dec') {
