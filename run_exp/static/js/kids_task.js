@@ -17,6 +17,10 @@ var debug_mode = 0; // debug mode determines how long the blocks are, 5 sec in d
 //var data_save_method = 'csv_server_py';
 var data_save_method = 'csv_client';
 
+var static_prefix = "../static/";
+var image_prefix = static_prefix + "images/task_images/";
+var image_prefix_button = "<img src=" + static_prefix + "images/task_images/";
+
 /* Disable right-click/context menu */
 if(debug_mode == false) {
   document.addEventListener('contextmenu', function (event) { event.preventDefault(); });
@@ -602,105 +606,81 @@ var harvest_instruc = {
  }
 
 
- var decision = {
-	 type: 'image-keyboard-response',
-	 stimulus: decision_img,
-	 stimulus_height:700,
-   trial_duration:3000,
-	 prompt:"<p>Dig here or travel to a new planet?<p>",
-   choices: ['A', 'L'],
-	 on_finish: function(data) {
-		var last_trial_data = jsPsych.data.get().last(2).values()[0];
+var decision = {
+  type: 'image-keyboard-response',
+  stimulus: decision_img,
+  stimulus_height:700,
+  trial_duration:3000,
+  prompt:"<p>Dig here or travel to a new planet?<p>",
+  choices: ['A', 'L'],
+  on_finish: function(data) {
+    var last_trial_data = jsPsych.data.get().last(2).values()[0];
     var last_two_trial_data = jsPsych.data.get().last(8).values()[0];
 
-		data.next_reward = last_trial_data.next_reward;
-		data.time_in_block = Date.now() - block_start;
-		data.block_num = b_num;
-		data.planet = planet;
-		data.prt = prt;
+    data.next_reward = last_trial_data.next_reward;
+    data.time_in_block = Date.now() - block_start;
+    data.block_num = b_num;
+    data.planet = planet;
+    data.prt = prt;
     data.trial_type = "decision";
 
+    // end of block / experiment
+    if ((data.time_in_block >= block_len[b_num-1]) || (block_num_planet == 20))  {
+      num_planets.push(planet);
 
-		 // end of block/ experiment
-  if ((data.time_in_block >= block_len[b_num-1]) | (block_num_planet == 20))  {
-       num_planets.push(planet)
+      // if this is the last block
+      if (b_num == total_num_blocks) {
+        // memory task removed
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [end_of_experiment_read],
+        }, jsPsych.resumeExperiment);
 
-         // if this is the last block
-       if (b_num == total_num_blocks) { // end of block or end of exp
-          const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      } else {
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [end_of_block_read],
+        }, jsPsych.resumeExperiment);
+      }
 
-          var compare_trials = drop_trials(alien_check,true_planet)
-          if (compare_trials.reduce(reducer) > 0) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [instructions_compare_read,instructions_compare_continue],}, jsPsych.resumeExperiment);
+      window.prt = 0;
+      window.block_num_planet = 0;
+      data.last_trial_on_planet = true;
+      window.b_num = b_num + 1;
 
-
-          if (compare_trials[0] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_0],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[1] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_1],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[2] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_2],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[3] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_3],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[4] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_4],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[5] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_5],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[6] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_6],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[7] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_7],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[8] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_8],}, jsPsych.resumeExperiment);
-          }}
-
-          jsPsych.addNodeToEndOfTimeline({timeline: [end_of_experiment_read],}, jsPsych.resumeExperiment);
-
-         // other blocks
-         } else { // if this is the firs =t or second and choose to leave
-          jsPsych.addNodeToEndOfTimeline({timeline: [end_of_block_read],}, jsPsych.resumeExperiment);
-         }
-
-         window.prt = 0;
-         window.block_num_planet = 0;
-         data.last_trial_on_planet = true;
-         window.b_num = b_num + 1;
-     // not the end
     } else {
       // travel
       if (data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('L'))  {
 
-        jsPsych.addNodeToEndOfTimeline({timeline: [travel,alien_welcome,landing,dig,harvest,decision]}, jsPsych.resumeExperiment);
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [travel,alien_welcome,landing,dig,harvest,decision]
+        }, jsPsych.resumeExperiment);
+
         data.last_trial_on_planet = true;
         window.prt = 0;
 
-    // stay
-    } else if (data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('A'))  {
-      jsPsych.addNodeToEndOfTimeline({
-         timeline: [dig,harvest,decision],
-       }, jsPsych.resumeExperiment);
+      // stay
+      } else if (data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode('A'))  {
 
-     window.prt = prt + 1;
-     data.last_trial_on_planet = false;
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [dig,harvest,decision],
+        }, jsPsych.resumeExperiment);
 
-      if ((last_two_trial_data.next_reward == last_trial_data.next_reward) & last_trial_data.next_reward < 5) {
-            data.next_reward = 0}
-    // didn't make choice
-    } else {
-      jsPsych.addNodeToEndOfTimeline({
-        timeline: [time_out,decision],
-      }, jsPsych.resumeExperiment);
-      data.last_trial_on_planet = false;}
+        window.prt = prt + 1;
+        data.last_trial_on_planet = false;
+
+        if ((last_two_trial_data.next_reward == last_trial_data.next_reward) & last_trial_data.next_reward < 5) {
+          data.next_reward = 0;
+        }
+
+      // no choice
+      } else {
+        jsPsych.addNodeToEndOfTimeline({
+          timeline: [time_out,decision],
+        }, jsPsych.resumeExperiment);
+        data.last_trial_on_planet = false;
+      }
     }
-  }}
+  }
+}
 
 
 var decision_prac = {
@@ -1299,54 +1279,57 @@ var instructions_begin_exp_continue = {
    		 window.block_start = Date.now();}
     data.trial_type = "instruc_begin_exp_contine";}};
 
+
+
 var end_of_block_read = {
-	type: 'audio-button-response',
-  stimulus: '../static/audio/clip_32_block_end.m4a',
-	prompt:"<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to continue, press <strong>continue</strong>. </p><p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'>",
+  type: 'html-button-response',
+  stimulus: "<p>You have been traveling for a while. Time to take a rest at home base!</p>" +
+            "<p>When you are ready to move on, press the <strong>continue</strong> button below.</p>" +
+            "<p style='font-size:25px;'>Home Base Visit # 1</p>" +
+            "<p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'></p>",
   choices: ['continue'],
-  trial_ends_after_audio: true,
   on_start: function(end_of_block_read) {
-    var begin_para = "<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to move on, press the <strong>continue</strong> button below. </p>"
+    var begin_para = "<p>You have been traveling for a while. Time to take a rest at home base!</p>" +
+                     "<p>When you are ready to move on, press the <strong>continue</strong> button below.</p>";
     var img = "<p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'></p>";
-		var block_str = (b_num-1).toString();
-		var home_base = "<p style='font-size:25px;'> Home Base Visit # ";
+    var block_str = (b_num - 1).toString();
+    var home_base = "<p style='font-size:25px;'>Home Base Visit # ";
     var para_end = "</p>";
-		var str_to_display = begin_para.concat(home_base,block_str,para_end,img);
-		end_of_block_read.prompt = str_to_display;
-	},
-	on_finish: function(data) {
-    data.trial_type = "end_of_block_read";
+    end_of_block_read.stimulus = begin_para.concat(home_base, block_str, para_end, img);
+  },
+  on_finish: function(data) {
     window.block_space_treasure = 0;
-    data.trial_type = "end_of_block_continue";
+    data.trial_type = "end_of_block_read";
     jsPsych.addNodeToEndOfTimeline({
-      timeline: [alien_welcome,landing,dig,harvest,decision],
+      timeline: [alien_welcome, landing, dig, harvest, decision],
     }, jsPsych.resumeExperiment);
     window.block_start = Date.now();
-	}
+  }
 };
 
-var end_of_block_continue = {
-	type: 'html-button-response',
-	stimulus:"<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to continue, press <strong>continue</strong>. </p><p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'>",
-  choices: ['continue'],
-  on_start: function(end_of_block_continue) {
-    var begin_para = "<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to move on, press the <strong>continue</strong> button below. </p>"
-    var img = "<p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'></p>";
-    var block_str = (b_num-1).toString();
-    var home_base = "<p style='font-size:25px;'> Home Base Visit # ";
-    var para_end = "</p>";
-    var str_to_display = begin_para.concat(home_base,block_str,para_end,img);
-    end_of_block_continue.stimulus = str_to_display;
-	},
-	on_finish: function(data) {
-    window.block_space_treasure = 0;
-    data.trial_type = "end_of_block_continue";
-    jsPsych.addNodeToEndOfTimeline({
-      timeline: [alien_welcome,landing,dig,harvest,decision],
-    }, jsPsych.resumeExperiment);
-    window.block_start = Date.now();
-	}
-};
+
+// var end_of_block_continue = {
+//   type: 'html-button-response',
+//   stimulus:"<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to continue, press <strong>continue</strong>. </p><p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'>",
+//   choices: ['continue'],
+//   on_start: function(end_of_block_continue) {
+//     var begin_para = "<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to move on, press the <strong>continue</strong> button below. </p>";
+//     var img = "<p><img src='./static/images/task_images/home_base.jpg' height='700' width='auto'></p>";
+//     var block_str = (b_num-1).toString();
+//     var home_base = "<p style='font-size:25px;'> Home Base Visit # ";
+//     var para_end = "</p>";
+//     var str_to_display = begin_para.concat(home_base,block_str,para_end,img);
+//     end_of_block_continue.stimulus = str_to_display;
+//   },
+//   on_finish: function(data) {
+//     window.block_space_treasure = 0;
+//     data.trial_type = "end_of_block_continue";
+//     jsPsych.addNodeToEndOfTimeline({
+//       timeline: [alien_welcome,landing,dig,harvest,decision],
+//     }, jsPsych.resumeExperiment);
+//     window.block_start = Date.now();
+//   }
+// };
 
 var instructions_compare_read = {
   type: 'audio-keyboard-response',
@@ -1542,28 +1525,33 @@ var compare_alien_8= {
 
 }};
 
+
 var end_of_experiment_read = {
-	type: 'audio-button-response',
-  stimulus: '../static/audio/clip_31_end.m4a',
-	prompt:'<p> Congrats! You are done with the study!</p><br><br><p><img src="../static/images/task_images/opening_img-01.jpg"</p>',
-  choices: ['go to the survey'],
+  type: 'html-button-response',
+  stimulus: "<p>Congrats! You are done with the game!</p>",
+  choices: ['finish experiment and download data'],
   on_start: function(end_of_experiment_read) {
-    var curr_bonus = Math.round(total_space_treasure*cents_per_gem);
-    var bonus = Math.round(curr_bonus*10)/10;
-    var begin_para = "<p> Congrats! You are done with the game!</p>";
-    var begin_bonus = "<p> You made $10 plus $";
+    var curr_bonus = Math.round(total_space_treasure * cents_per_gem);
+    var bonus = Math.round(curr_bonus * 10) / 10;
+
+    var begin_para = "<p>Congrats! You are done with the game!</p>";
+    var begin_bonus = "<p>You made $10 plus $";
     var bonus_str = bonus.toString();
-    var end_bonus = " in bonus payment! You will recieve an Amazon giftcard with this amount in the next 3 days. You</p>";
-    var end_para = "<p>Press the button below to be redirected to the survey.</p><br><br><p><img src='../static/images/task_images/opening_img-01.jpg' height='600' width='auto'></p>"
-    end_of_experiment_read.prompt = begin_para.concat(begin_bonus,bonus_str,end_bonus,end_para);
+    var end_bonus = " in bonus payment! You will receive an Amazon gift card with this amount in the next 3 days.</p>";
+    var end_para = "<p>Press the button below to finish the experiment and download your data.</p>" +
+                   "<br><br><p><img src='../static/images/task_images/opening_img-01.jpg' height='600' width='auto'></p>";
+
+    end_of_experiment_read.stimulus = begin_para.concat(begin_bonus, bonus_str, end_bonus, end_para);
     window.bonus = bonus;
   },
   on_finish: function(data) {
-    data.bonus = bonus;
-    var last_trial_data = jsPsych.data.get().last(1).values()[0];
-    data.prompt = last_trial_data.prompt;
-    data.num_failures = num_quiz_failures
+    data.bonus = window.bonus;
+    data.num_failures = num_quiz_failures;
     data.trial_type = "end_of_exp_read";
+
+    save_final_deter = 'final';
+    //psiturk.recordUnstructuredData("subject_id", subject_id);
+    save_data(true);
   }
 };
 
@@ -1616,17 +1604,44 @@ all_audio = ['../static/audio/axe.mp3', '../static/audio/clip_10_quiz.m4a', '../
   //   document.body.innerHTML = '<p> <center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished. </center> </p>';
   //     setTimeout(function () {var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw" + "?participant_ID="+participant_id+"&subject_ID=" +subject_id; window.location = end_link;}, 10000)
   // }
-  on_finish: function() {
+//   on_finish: function() {
+//   save_final_deter = 'final';
+//   save_data(true);
+
+//   document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished.</center></p>';
+
+//   setTimeout(function () {
+//     var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw"
+//       + "?participant_ID=" + participant_id
+//       + "&subject_ID=" + subject_id;
+//     window.location = end_link;
+//   }, 10000);
+// }
+
+// on_finish: function() {
+//   save_final_deter = 'final';
+//   psiturk.recordUnstructuredData("subject_id", subject_id);
+//   save_data(true);
+
+//   document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. Your data file should download automatically.</center></p>';
+// }
+
+on_finish: function() {
   save_final_deter = 'final';
+  //psiturk.recordUnstructuredData("subject_id", subject_id)
   save_data(true);
 
-  document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished.</center></p>';
+  document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. Your data file should download automatically.</center></p>';
+  
+  // setTimeout(function () {
+  //   var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw"
+  //     + "?participant_ID=" + participant_id
+  //     + "&subject_ID=" + subject_id;
+  //   window.location = end_link;
+  // }, 10000);
 
-  setTimeout(function () {
-    var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw"
-      + "?participant_ID=" + participant_id
-      + "&subject_ID=" + subject_id;
-    window.location = end_link;
-  }, 10000);
 }
+
+
+
 })
