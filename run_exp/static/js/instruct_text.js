@@ -6,7 +6,7 @@ var move_button_1 = '<button class="jspsych-html-btn"><img src="../static/images
 
 var move_button_2 = '<button class="jspsych-html-btn"><img src="../static/images/task_images/planet-02.jpg" height="50"></button>';
 
-var goal_txt = "<p> As a space explorer, you’ll visit different planets to dig for space treasure, these pink gems.</p> <p> The more treasure you dig up, the more bonus money you’ll win! </p><br><br><p><img src='../static/images/task_images/pink_gem.jpg' height='300' width='auto'></p>";
+var goal_txt = "<p> As a space explorer, you’ll visit different planets to dig for space treasure, these pink gems.</p> <p> The more treasure you dig up, the better the prize you’ll win!  </p><br><br><p><img src='../static/images/task_images/pink_gem.jpg' height='300' width='auto'></p>";
 
 var dig_txt = "<p> When you’ve arrived at a new planet, you will dig once. </p> <p>Then, you get to decide if you want to stay on the planet and dig again or travel to a new planet and dig there.</p> <p> To stay and dig, press the letter <strong>‘A’</strong> on your keyboard. Try pressing it now! </p><p><img src='../static/images/task_images/land.jpg'  height='700' width='auto'></p>";
 
@@ -18,9 +18,11 @@ var time_out_txt = "<p>If you don't make your choice fast enough, you’ll have 
 
 var break_txt = "<p> After digging and traveling for a while, you’ll be able to take a break at home base. </p><p>The game will last 24 minutes no matter what.</p><p>You will visit home base every 6 minutes, so, you will visit home base three times during the game.</p><br><p><img src='../static/images/task_images/home_base.jpg' height='600' width='auto'></p>";
 
-var practice_game_txt = "<p> Are you ready to play a practice game? </p> <p>In this practice game, you'll be digging up barrels of gems. But, in the real game, you'll be digging up the gems themselves. </p>";
+//var practice_game_txt = "<p> Are you ready to play a practice game? </p> <p>In this practice game, you'll be digging up barrels of gems. But, in the real game, you'll be digging up the gems themselves. </p>";
 
-var practice_game_finish_txt = "<p>Great job on the practice game! Now, I'm gonna ask you some questions to make sure you understand the game.</p><p>But, before we do that, let's review some of the instructions.</p>";
+var practice_game_txt = "<p>Are you ready to play a practice game?</p><p>In this practice game, you'll be digging up barrels of gems. But, in the real game, you'll be digging up the gems themselves.</p><p>You can start the practice game now or re-read the instructions.</p>";
+
+var practice_game_finish_txt = "<p>Great job on the practice game! Now, I'm gonna ask you some questions to make sure you understand the game.</p>";
 
 var instructions_repeat_txt = "<p>In this game, your goal is to collect as many gems as you can. That’s how you will win bonus money. </p> <p>The entire game will last 24 minutes no matter how many gems you collect or how many planets you visit. </p><p>To stay on a planet and dig again, press the letter A on your keyboard. To leave for a new planet, press the letter L.</p><p>The more you dig on a planet, the fewer gems you’ll get with each dig which is why you might consider leaving for a new planet. </p><p>When you arrive at a new planet, you’ll be greeted by an alien. What the alien looks like does not tell you anything about how much treasure is on the planet. </p>";
 
