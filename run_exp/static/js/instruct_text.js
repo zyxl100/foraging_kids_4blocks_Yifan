@@ -24,7 +24,7 @@ var practice_game_txt = "<p>Are you ready to play a practice game?</p><p>In this
 
 var practice_game_finish_txt = "<p>Great job on the practice game! Now, I'm gonna ask you some questions to make sure you understand the game.</p>";
 
-var instructions_repeat_txt = "<p>In this game, your goal is to collect as many gems as you can. That’s how you will win bonus money. </p> <p>The entire game will last 24 minutes no matter how many gems you collect or how many planets you visit. </p><p>To stay on a planet and dig again, press the letter A on your keyboard. To leave for a new planet, press the letter L.</p><p>The more you dig on a planet, the fewer gems you’ll get with each dig which is why you might consider leaving for a new planet. </p><p>When you arrive at a new planet, you’ll be greeted by an alien. What the alien looks like does not tell you anything about how much treasure is on the planet. </p>";
+var instructions_repeat_txt = "<p>In this game, your goal is to collect as many gems as you can. That’s how you will win a better prize. </p> <p>The entire game will last 24 minutes no matter how many gems you collect or how many planets you visit. </p><p>To stay on a planet and dig again, press the letter A on your keyboard. To leave for a new planet, press the letter L.</p><p>The more you dig on a planet, the fewer gems you’ll get with each dig which is why you might consider leaving for a new planet. </p><p>When you arrive at a new planet, you’ll be greeted by an alien. What the alien looks like does not tell you anything about how much treasure is on the planet. </p>";
 
 var q1_a1 = '<button class="jspsych-html-btn">Visiting more planets</button>';
 
