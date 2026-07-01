@@ -1320,7 +1320,7 @@ var end_of_block_read = {
   stimulus: '../static/audio/clip_32_block_end.m4a',
 	prompt:"<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to continue, press <strong>continue</strong>. </p><p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'>",
   choices: ['continue'],
-  trial_ends_after_audio: true,
+  trial_ends_after_audio: false,
   on_start: function(end_of_block_read) {
     var begin_para = "<p> You have been traveling for a while. Time to take a rest at home base! </p> <p> When you are ready to move on, press the <strong>continue</strong> button below. </p>"
     var img = "<p><img src='../static/images/task_images/home_base.jpg' height='700' width='auto'></p>";
