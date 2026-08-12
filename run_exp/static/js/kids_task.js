@@ -623,41 +623,6 @@ var harvest_instruc = {
 
          // if this is the last block
        if (b_num == total_num_blocks) { // end of block or end of exp
-          const reducer = (accumulator, currentValue) => accumulator + currentValue;
-
-          var compare_trials = drop_trials(alien_check,true_planet)
-          if (compare_trials.reduce(reducer) > 0) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [instructions_compare_read,instructions_compare_continue],}, jsPsych.resumeExperiment);
-
-
-          if (compare_trials[0] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_0],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[1] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_1],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[2] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_2],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[3] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_3],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[4] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_4],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[5] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_5],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[6] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_6],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[7] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_7],}, jsPsych.resumeExperiment);
-          }
-          if (compare_trials[8] == 1) {
-            jsPsych.addNodeToEndOfTimeline({timeline: [compare_alien_8],}, jsPsych.resumeExperiment);
-          }}
-
           jsPsych.addNodeToEndOfTimeline({timeline: [end_of_experiment_read],}, jsPsych.resumeExperiment);
 
          // other blocks
@@ -761,7 +726,7 @@ var quiz_instruc = {
 var quiz_q_1_ask = {
   type:'audio-button-response',
   stimulus: "../static/audio/clip_11_q1_ask.m4a",
-  prompt: "<p>How do you win extra money?</p>",
+  prompt: "<p>How do you win a better prize?</p>",
   choices: ['Visiting more planets','Staying at home base longer', 'Collecting more gems'],
   on_finish: function(data) {
     data.trial_type = "quiz_q_1_ask";
@@ -775,7 +740,7 @@ var quiz_q_1_ask = {
 var quiz_q_1_fb_correct = {
   type:'audio-keyboard-response',
   stimulus: "../static/audio/clip_12_q1_correct.m4a",
-  prompt: "<p>That’s correct. You win extra money by collecting more gems.</p>",
+  prompt: "<p>That’s correct. You win a better prize by collecting more gems.</p>",
   choices: jsPsych.NO_KEYS,
   trial_ends_after_audio: true,
   on_finish: function(data) {
@@ -1561,48 +1526,13 @@ var compare_alien_8= {
 var end_of_experiment_read = {
 	type: 'audio-button-response',
   stimulus: '../static/audio/clip_31_end.m4a',
-	prompt:'<p> Congrats! You are done with the study!</p><br><br><p><img src="../static/images/task_images/opening_img-01.jpg"</p>',
-  choices: ['go to the survey'],
-  on_start: function(end_of_experiment_read) {
-    var curr_bonus = Math.round(total_space_treasure*cents_per_gem);
-    var bonus = Math.round(curr_bonus*10)/10;
-    var begin_para = "<p> Congrats! You are done with the game!</p>";
-    var begin_bonus = "<p> You made $10 plus $";
-    var bonus_str = bonus.toString();
-    var end_bonus = " in bonus payment! You will recieve an Amazon giftcard with this amount in the next 3 days. You</p>";
-    var end_para = "<p>Press the button below to be redirected to the survey.</p><br><br><p><img src='../static/images/task_images/opening_img-01.jpg' height='600' width='auto'></p>"
-    end_of_experiment_read.prompt = begin_para.concat(begin_bonus,bonus_str,end_bonus,end_para);
-    window.bonus = bonus;
-  },
+	prompt: '<p>Congrats! You are done with the game!</p>',
+  choices: ['end the game'],
   on_finish: function(data) {
-    data.bonus = bonus;
     var last_trial_data = jsPsych.data.get().last(1).values()[0];
     data.prompt = last_trial_data.prompt;
     data.num_failures = num_quiz_failures
     data.trial_type = "end_of_exp_read";
-  }
-};
-
-var end_of_experiment_continue = {
-	type: 'html-button-response',
-	stimulus:'<p> Congrats! You are done with the experiment!</p><br><br><p><img src="../static/images/task_images/opening_img-01.jpg"</p>',
-  choices: ['end the game'],
-  on_start: function(end_of_experiment_continue) {
-    var curr_bonus = Math.round(total_space_treasure*cents_per_gem);
-    var bonus = Math.round(curr_bonus*10)/10;
-    var begin_para = "<p> Congrats! You are done with the game!</p>";
-    var begin_bonus = "<p> You made $10 plus $";
-    var bonus_str = bonus.toString();
-    var end_bonus = " in bonus payment! You will recieve an Amazon giftcard with this amount in the next 3 days. You just have to answer a few short questions and then you'll ve finished with the study. </p>";
-    var end_para = "<p>Press the button below to be redirected to the survey.</p><br><br><p><img src='../static/images/task_images/opening_img-01.jpg' height='600' width='auto'></p>"
-    end_of_experiment_continue.stimulus = begin_para.concat(begin_bonus,bonus_str,end_bonus,end_para);
-  },
-  on_finish: function(data) {
-    data.bonus = bonus;
-    var last_trial_data = jsPsych.data.get().last(1).values()[0];
-    data.prompt = last_trial_data.prompt;
-    data.num_failures = num_quiz_failures
-    data.trial_type = "end_of_exp_continue";
   }
 };
 
@@ -1623,26 +1553,9 @@ all_audio = ['../static/audio/axe.mp3', '../static/audio/clip_10_quiz.m4a', '../
     preload_audio:all_audio,
     max_load_time: 60000000,
     use_webaudio: false,
-  //   on_finish: function() {
-  //   save_final_deter = 'final';
-  //   psiturk.recordUnstructuredData("subject_id", subject_id);
-  //   save_data(true)
-  //   // document.body.innerHTML = '<p> <center>Thank you for participating in the second part of the study! Please wait while your data saves. After 10 seconds, you will be redirected to Spark. </center> </p>';
-  //   //   setTimeout(function () {var end_link = "https://spark.hartleylab.org/completed/".concat(subject_id); window.location = end_link;}, 10000)
-  //   document.body.innerHTML = '<p> <center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished. </center> </p>';
-  //     setTimeout(function () {var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw" + "?participant_ID="+participant_id+"&subject_ID=" +subject_id; window.location = end_link;}, 10000)
-  // }
   on_finish: function() {
   save_final_deter = 'final';
   save_data(true);
-
-  document.body.innerHTML = '<p><center>Thank you for participating in this study! Please wait while your data saves. You will be redirected to a survey to answer a few questions then you will be finished.</center></p>';
-
-  setTimeout(function () {
-    var end_link = "https://nyu.qualtrics.com/jfe/form/SV_0GLuzqpMFZ5GVfw"
-      + "?participant_ID=" + participant_id
-      + "&subject_ID=" + subject_id;
-    window.location = end_link;
-  }, 10000);
+  document.body.innerHTML = '<p><center>Congrats! You are done with the game!</center></p>';
 }
 })
