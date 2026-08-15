@@ -745,18 +745,18 @@ var quiz_q_1_fb_correct = {
   trial_ends_after_audio: true,
   on_finish: function(data) {
     console.log('fb')
-    data.prompt = "<p>That’s correct. You win extra money by collecting more gems.</p>";
+    data.prompt = "<p>That’s correct. You win a better prize by collecting more gems.</p>";
     data.trial_type = "quiz_q_1_fb_correct";}
   }
 
 var quiz_q_1_fb_incorrect = {
   type:'audio-keyboard-response',
   stimulus: "../static/audio/clip_13_q1_incorrect.m4a",
-  prompt: "<p>That’s incorrect. You win extra money by collecting more gems.</p>",
+  prompt: "<p>That’s incorrect. You win a better prize by collecting more gems.</p>",
   choices: jsPsych.NO_KEYS,
   trial_ends_after_audio: true,
   on_finish: function(data) {
-    data.prompt = "<p>That’s incorrect. You win extra money by collecting more gems.</p>";
+    data.prompt = "<p>That’s incorrect. You win a better prize by collecting more gems.</p>";
     data.trial_type = "quiz_q_1_fb_incorrect";}
   }
 
