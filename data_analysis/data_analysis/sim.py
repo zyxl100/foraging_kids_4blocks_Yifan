@@ -2,17 +2,23 @@ import scipy.stats as stats
 import numpy as np
 import data_combiner as dc
 import pickle
+from pathlib import Path
 ##### Helper function for running the simulation ####
 
 
 def load_data():
-    file = open("../../experiment1k/exp_struc/pickled_exp_parms/blocks/old/110017437_best.pkl",'rb')
+    file = open(
+    Path(__file__).resolve().parents[1] / "exp_struc" / "110017437_best.pkl",
+    "rb"
+    )
     data= pickle.load(file)
     exp_struc = data[0]
     rho_0 = data[1]
     all_decay = data[2]
     file.close()
     return exp_struc, rho_0, all_decay
+
+
 
 def flatten_list(list):
     new_list = [item for sublist in list for item in sublist]

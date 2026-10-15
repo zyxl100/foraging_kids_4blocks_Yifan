@@ -4,10 +4,14 @@ import scipy.stats as stats
 from itertools import groupby
 import pickle
 import sim
+from pathlib import Path
 
 
 def load_data():
-    file = open("../../experiment1k/exp_struc/pickled_exp_parms/blocks/old/110017437_best.pkl",'rb')
+    file = open(
+    Path(__file__).resolve().parents[1] / "exp_struc" / "110017437_best.pkl",
+    "rb"
+    )
     data= pickle.load(file)
     exp_struc = data[0]
     rho_0 = data[1]
@@ -261,7 +265,8 @@ def clean_data_indiv(filename,sub_num):
 
     n_prac = len(raw_data.query("trial_type=='quiz_prac'"))
 
-    condition = raw_data['condition'][1]
+    #condition = raw_data['condition'][1]
+    condition = raw_data["condition"].iloc[1] if "condition" in raw_data.columns else None
 
     prts,block_num = get_prts(raw_data)
 
