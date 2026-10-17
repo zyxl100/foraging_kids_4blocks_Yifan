@@ -1,0 +1,15 @@
+{
+  "batch": "child",
+  "model": "both",
+  "sobol": 1024,
+  "starts": 5,
+  "particles": 200,
+  "samples": 200,
+  "seed": 42,
+  "gamma_sign": 1,
+  "trial_sha256": "9d387ca167f2255b5492975e8e7a567392d9badf34009de19fbfbd296977df2d",
+  "prepared_sha256": "4ace187e7b376abc6dd263748248360e57925be81a78a957ba783be0f255c8a1",
+  "source_julia_sha256": "f221cba96aa80cd930e9d3f3228c9bb4ac7d82c94788cda2cada4633931eb3cd",
+  "particle_filter_sha256": "1b9f476a8bdd973e69dbfec5ed35eb6c65e99893536e1d8467155d7d9d8beec9",
+  "helper_sha256": "5ef8c557a5eb23c1579fb4605b49712d36c7575415cc80922661501a8ccbf4f1"
+}

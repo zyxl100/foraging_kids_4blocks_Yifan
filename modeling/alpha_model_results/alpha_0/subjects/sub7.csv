@@ -1,0 +1,2 @@
+sub_num,model,alpha,gamma_base,gamma_coef,beta,epsilon,neg_llh,n_choices,k,AIC,BIC,n_sobol,n_local_starts,n_particles,n_samples,seed,optimizer_converged
+7,alpha_0,0.0,10.0,0.0,1.0,0.1,78.98428832997325,115,2,161.9685766599465,167.458440916673,1024,5,200,200,49,True
