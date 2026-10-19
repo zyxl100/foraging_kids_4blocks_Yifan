@@ -1,0 +1,3 @@
+generating_model,fitting_model,agent_index,agent_id,true_alpha,true_gamma_base,true_gamma_coef,true_epsilon,true_beta,fitted_alpha,fitted_gamma_base,fitted_gamma_coef,fitted_epsilon,fitted_beta,neg_llh,AIC,BIC,n_choices,n_rewards,n_planets,n_blocks,optimizer_converged
+alpha_0,alpha_0,20,20,0.0,-0.44668836140610324,0.0,0.08021704481857482,1.0,0.0,-0.507888121867602,0.0,0.07273374661709217,1.0,42.93034674388457,89.86069348776914,96.30140513792578,185,189,40,4,True
+alpha_0,alpha_1,20,20,0.0,-0.44668836140610324,0.0,0.08021704481857482,1.0,0.2,0.40742191062348476,-0.20302002979999997,0.1,1.0,50.553810360360984,107.10762072072197,116.76868819595694,185,189,40,4,True

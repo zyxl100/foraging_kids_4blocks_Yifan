@@ -1,0 +1,96 @@
+{
+  "generating_models": [
+    "alpha_0",
+    "alpha_1"
+  ],
+  "true_parameter_ranges": {
+    "gamma_base": [
+      -4.0,
+      4.0
+    ],
+    "gamma_coef": [
+      -1.5,
+      1.5
+    ],
+    "epsilon": [
+      0.0,
+      0.1
+    ]
+  },
+  "n_particles_generate": 200,
+  "n_samples_generate": 20,
+  "n_particles_fit": 200,
+  "n_samples_fit": 200,
+  "n_sobol": 128,
+  "n_local_starts": 10,
+  "simulation_seed": 20261018,
+  "fit_seed": 84017,
+  "block_seconds": 360.0,
+  "max_planets_per_block": 20,
+  "max_harvests_per_planet": 100,
+  "gamma_sign": 1,
+  "model_specs": {
+    "alpha_0": {
+      "alpha": 0.0,
+      "free": [
+        "gamma_base",
+        "epsilon"
+      ]
+    },
+    "alpha_1": {
+      "alpha": 0.2,
+      "free": [
+        "gamma_base",
+        "gamma_coef",
+        "epsilon"
+      ]
+    }
+  },
+  "fit_bounds": {
+    "gamma_base": [
+      -10.0,
+      10.0
+    ],
+    "gamma_coef": [
+      -3.0,
+      3.0
+    ],
+    "epsilon": [
+      0.0,
+      0.1
+    ]
+  },
+  "task_source": "empirical per-block galaxy probabilities, ORIGINAL child reward generator and timing",
+  "environment": [
+    {
+      "block": 1,
+      "p_poor": 0.4117647058823529,
+      "p_neutral": 0.29411764705882354,
+      "p_rich": 0.29411764705882354
+    },
+    {
+      "block": 2,
+      "p_poor": 0.38823529411764707,
+      "p_neutral": 0.058823529411764705,
+      "p_rich": 0.5529411764705883
+    },
+    {
+      "block": 3,
+      "p_poor": 0.0,
+      "p_neutral": 0.68,
+      "p_rich": 0.32
+    },
+    {
+      "block": 4,
+      "p_poor": 0.44086021505376344,
+      "p_neutral": 0.0,
+      "p_rich": 0.5591397849462365
+    }
+  ],
+  "data_hash": "9d387ca167f2255b5492975e8e7a567392d9badf34009de19fbfbd296977df2d",
+  "fitter_python_hash": "3403f41b1159bb43c1f6d704c1bb5c15ab22c3c550ab1ecf3013a9a76d3bfed7",
+  "fitter_julia_hash": "f221cba96aa80cd930e9d3f3228c9bb4ac7d82c94788cda2cada4633931eb3cd",
+  "particle_filter_hash": "1b9f476a8bdd973e69dbfec5ed35eb6c65e99893536e1d8467155d7d9d8beec9",
+  "simulator_hash": "3ca8f09a5476aabc83cd49bc6738a1d583eb8c1001f8e1dffaa974c09e53407c",
+  "latent_helper_hash": "5ef8c557a5eb23c1579fb4605b49712d36c7575415cc80922661501a8ccbf4f1"
+}
