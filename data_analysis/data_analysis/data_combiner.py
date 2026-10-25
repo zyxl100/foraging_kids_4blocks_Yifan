@@ -287,9 +287,10 @@ def clean_data_indiv(filename,sub_num):
 
     rt_list = divide_data_from_planets(raw_data,"decision","rt")
 
-    avg_rt = [np.mean(x) for x in rt_list]
-
-    rt_list = [drop_nan_rt(i) for i in rt_list]
+    # Keep one RT entry per decision; missing RTs remain NaN so positions align.
+    rt_list = [[float(v) if pd.notna(v) else np.nan for v in planet] for planet in rt_list]
+    avg_rt = [float(np.nanmean(x)) if np.isfinite(x).any() else np.nan
+              for x in (np.asarray(v, dtype=float) for v in rt_list)]
 
     catch_perf, catch_rt = catch_trial_perf(raw_data)
 
@@ -362,3 +363,40 @@ def clean_data_group(filenames):
                                    'mode':'int','mode_post':'int','opt_prt':'int','opt_prt_om':'int'})
 
     return clean_data
+
+
+def decision_trials_indiv(filename, sub_num):
+    """One row per decision event; rt uses the raw CSV units (not converted)."""
+    raw = pd.read_csv(filename, on_bad_lines="skip").reset_index(drop=True)
+    lands = raw.index[raw["trial_type"].eq("land")].to_numpy()
+    ends = raw.index[raw["last_trial_on_planet"].eq(True)].to_numpy()
+    if len(lands) != len(ends):
+        raise ValueError(f"Planet boundary mismatch in {filename}: {len(lands)} lands, {len(ends)} ends")
+
+    pieces = []
+    for planet, (start, end) in enumerate(zip(lands, ends)):
+        if end < start:
+            raise ValueError(f"Invalid planet boundary in {filename}, planet {planet}")
+        section = raw.iloc[start:end + 1]
+        choices = section.loc[section["trial_type"].eq("decision")].copy()
+        if choices.empty:
+            continue
+        choices["raw_row"] = choices.index
+        choices["sub_num"] = sub_num
+        choices["planet"] = planet
+        choices["decision_num"] = range(len(choices))
+        choices["rt"] = pd.to_numeric(choices["rt"], errors="coerce")
+        # Keep the raw record's block number and response metadata.
+        if "block_num" in choices.columns:
+            choices["block"] = choices["block_num"]
+        pieces.append(choices)
+
+    if not pieces:
+        return pd.DataFrame(columns=["sub_num", "planet", "decision_num", "rt", "raw_row"])
+    return pd.concat(pieces, ignore_index=True)
+
+
+def decision_trials_group(filenames):
+    """Maintain the same sub_num IDs as clean_data_group(filenames)."""
+    frames = [decision_trials_indiv(f, i) for i, f in enumerate(filenames)]
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
